@@ -33,20 +33,65 @@ Then press `i` for iOS Simulator, `a` for Android Emulator, or scan the QR code 
 
 ## How to Create an App
 
-### Step 1: Choose a Starting Point
+### Step 1: Create a New Project
 
-When you open MetaApp, you'll see templates:
+1. Open MetaApp — you'll see the **project list** (your saved apps)
+2. Tap **"+ New"** in the top right
+3. Enter a name for your app (e.g., "My Contacts App")
+4. Choose a starting template:
+   - **Blank App** — start from scratch
+   - **Todo App** — pre-built todo list to learn from
+5. Tap **"Create"** — the builder opens
 
-| Template | What It Does |
+### Step 2: Use the Builder
+
+The builder has a **top toolbar** and **8 bottom tabs**:
+
+**Top toolbar:**
+- **Back** — return to project list
+- **Undo / Redo** — undo or redo changes
+- **Save** — save your app to device
+- **Preview** — run your app full-screen
+
+**Bottom tabs (left to right):**
+
+| Tab | What It Does |
 |---|---|
-| **Blank** | Empty app — start from scratch |
-| **Todo** | Todo list with add, check off, and delete |
+| **Canvas** | Shows the component tree of your current screen. Tap any component to select it. Use arrows to reorder, X to delete |
+| **+ Add** | Opens the component palette. Tap any component to add it to the selected container |
+| **Screens** | Add, remove, or switch between screens. Long-press to delete |
+| **Data** | Define state variables (text, number, boolean, list, object). Toggle "Save to device" for persistence |
+| **Actions** | Create named actions (Set State, Navigate, Alert, DB Insert/Query/Update/Delete) |
+| **Style** | Edit theme colors (primary, background, text, etc.) |
+| **Modules** | Expose your app as a module, or embed other apps inside yours |
+| **Settings** | App name, description, version, navigation type (Stack or Tabs) |
 
-Tap a template to start building, or use it as-is.
+### Step 3: Add Components
 
-### Step 2: Design Your Screens
+1. Tap **"+ Add"** in the bottom bar
+2. You'll see components organized by category:
 
-Each app is made of **screens**. A screen contains **components** arranged in a layout:
+**Basic:** Text, Button, Image, Text Input, Switch
+**Layout:** View (container), Scroll View, Card, Spacer
+**Forms:** Checkbox
+
+3. Tap a component to add it to the current screen
+4. The component appears in the Canvas tree
+5. Tap the component in Canvas to select it — the **property editor** opens
+
+### Step 4: Configure Components
+
+When you tap a component in the Canvas, the property editor shows:
+
+- **Content** — text, title, placeholder, etc.
+- **Style** — variant (Body/Heading/Caption/Label for text, Primary/Secondary/Outline/Ghost for buttons)
+- **Layout** — direction (Column/Row), align, justify, flex
+- **Spacing** — padding, margin
+- **Appearance** — background color, border radius, border width
+
+Tap **"Done"** when finished editing.
+
+### Step 5: Design Your Screens
 
 #### Available Components
 
