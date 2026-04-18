@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { enableScreens } from 'react-native-screens';
 import { ProjectListScreen } from './src/builder/ProjectListScreen';
 import { BuilderScreen } from './src/builder/BuilderScreen';
 import { PreviewModal } from './src/builder/preview/PreviewModal';
 import { AppDefinition } from './src/schema/types';
 import { ProjectDatabase } from './src/runtime/storage/ProjectDatabase';
 import { registerBuiltinComponents } from './src/runtime/registry/builtins';
+
+// Enable native screens for Android compatibility
+enableScreens(true);
 
 // Ensure components are registered
 registerBuiltinComponents();
@@ -19,6 +23,7 @@ export default function App() {
   const [mode, setMode] = useState<AppMode>('projects');
   const [currentApp, setCurrentApp] = useState<AppDefinition | null>(null);
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
+  const [previewKey, setPreviewKey] = useState(0);
 
   const handleOpenBuilder = (definition: AppDefinition, projectId: string) => {
     setCurrentApp(definition);
@@ -28,6 +33,7 @@ export default function App() {
 
   const handlePreview = (definition: AppDefinition) => {
     setCurrentApp(definition);
+    setPreviewKey((k) => k + 1);
     setMode('preview');
   };
 
@@ -62,6 +68,7 @@ export default function App() {
       )}
       {mode === 'preview' && currentApp && (
         <PreviewModal
+          key={`preview-${previewKey}`}
           appDefinition={currentApp}
           onClose={handleBackToProjects}
         />
