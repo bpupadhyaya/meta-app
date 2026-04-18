@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
+import * as Crypto from 'expo-crypto';
 
 export function generateId(): string {
-  return uuidv4();
+  return Crypto.randomUUID();
 }
 
 export function generateComponentId(type: string): string {
-  return `${type}-${uuidv4().slice(0, 8)}`;
+  return `${type}-${Crypto.randomUUID().slice(0, 8)}`;
 }
