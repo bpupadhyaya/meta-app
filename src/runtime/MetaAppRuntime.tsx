@@ -6,6 +6,7 @@ import { RuntimeStateProvider, createRuntimeStore } from './state/RuntimeStatePr
 import { NavigationRenderer } from './NavigationRenderer';
 import { registerBuiltinComponents } from './registry/builtins';
 import { StorageEngine } from './storage/StorageEngine';
+import { ErrorBoundary } from './ErrorBoundary';
 
 // Register built-in components on module load
 registerBuiltinComponents();
@@ -62,15 +63,17 @@ export function MetaAppRuntime({ appDefinition }: MetaAppRuntimeProps) {
   }
 
   return (
-    <ThemeProvider theme={appDefinition.theme}>
-      <RuntimeStateProvider store={store}>
-        <NavigationRenderer
-          navigation={appDefinition.navigation}
-          screens={appDefinition.screens}
-          actions={appDefinition.actions}
-          storage={storageEngine}
-        />
-      </RuntimeStateProvider>
-    </ThemeProvider>
+    <ErrorBoundary fallbackMessage="This app encountered an error. Go back and check your app definition.">
+      <ThemeProvider theme={appDefinition.theme}>
+        <RuntimeStateProvider store={store}>
+          <NavigationRenderer
+            navigation={appDefinition.navigation}
+            screens={appDefinition.screens}
+            actions={appDefinition.actions}
+            storage={storageEngine}
+          />
+        </RuntimeStateProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }

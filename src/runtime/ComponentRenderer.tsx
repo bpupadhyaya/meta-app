@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { ComponentNode } from '../schema/types';
 import { ComponentRegistry } from './registry/ComponentRegistry';
 import { useTheme } from './styling/ThemeProvider';
@@ -105,9 +105,20 @@ export function ComponentRenderer({ node, extraScope, actions, storage, navigati
   if (eventHandlers.onPress) eventProps.onPress = eventHandlers.onPress;
   if (eventHandlers.onChange) eventProps.onChange = eventHandlers.onChange;
 
+  // Accessibility
+  const accessibilityProps: Record<string, unknown> = {};
+  if (resolvedProps.text && typeof resolvedProps.text === 'string') {
+    accessibilityProps.accessibilityLabel = resolvedProps.text;
+  } else if (resolvedProps.title && typeof resolvedProps.title === 'string') {
+    accessibilityProps.accessibilityLabel = resolvedProps.title;
+  }
+  if (eventHandlers.onPress) {
+    accessibilityProps.accessibilityRole = 'button';
+  }
+
   // Render children recursively
   const children = node.children?.map((child) => (
-    <ComponentRenderer
+    <MemoizedComponentRenderer
       key={child.id}
       node={child}
       extraScope={extraScope}
@@ -121,9 +132,15 @@ export function ComponentRenderer({ node, extraScope, actions, storage, navigati
     <Component
       {...resolvedProps}
       {...eventProps}
+      {...accessibilityProps}
       style={resolvedStyle}
     >
       {children}
     </Component>
   );
 }
+
+// Memoized version for recursive children rendering
+const MemoizedComponentRenderer = memo(ComponentRenderer, (prev, next) => {
+  return prev.node === next.node && prev.extraScope === next.extraScope;
+});

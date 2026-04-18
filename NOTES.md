@@ -146,15 +146,15 @@ npx expo start
 ```
 
 ## File Count
-- 51 TypeScript source files
+- 60 TypeScript source files
 - 0 TypeScript errors
 - All code is cross-platform (iOS + Android from same source)
 
-## Completed Phases
+## Completed Phases — ALL DONE
 - Phase 1: Foundation (schema, components, renderer) - DONE
 - Phase 2: Dynamic Runtime (state, bindings, actions, expressions) - DONE
 - Storage Layer (SQLite + AsyncStorage, fully offline) - DONE
 - Phase 3: Visual Builder (project list, builder UI, palette, canvas, property editor, preview, theme, state/action editors, settings, undo/redo, error boundary) - DONE
-- Phase 4: Advanced Builder - partially done (state editor, action editor included in Phase 3)
-- Phase 5: Module System - NOT STARTED
-- Phase 6: Polish - partially done (error boundary added)
+- Phase 4: Advanced Builder (state editor, action editor, app settings, navigation config) - DONE
+- Phase 5: Module System (ModuleBridge, ModuleHost, ModuleLoader, ModuleLifecycle, DependencyResolver, Module Editor in builder) - DONE
+- Phase 6: Polish (error boundary, memoized renderer, accessibility labels, export/import, schema migrations, duplicate project) - DONE

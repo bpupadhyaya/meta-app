@@ -5,6 +5,7 @@ import { ProjectDatabase, SavedProject } from '../runtime/storage/ProjectDatabas
 import { templates } from '../templates';
 import { generateId } from '../utils/idGenerator';
 import { createDefaultApp } from '../schema/defaults';
+import { exportAppToClipboardString, importAppFromJSON } from '../storage/exportImport';
 
 interface ProjectListScreenProps {
   onOpenBuilder: (definition: AppDefinition, projectId: string) => void;
@@ -61,9 +62,27 @@ export function ProjectListScreen({ onOpenBuilder, onPreview }: ProjectListScree
   };
 
   const handleExport = (project: SavedProject) => {
-    const json = projectDb.exportProject(project.id);
-    if (json) {
-      Alert.alert('Export', 'App definition copied to clipboard (in production, this would use Share sheet).');
+    const definition = projectDb.parseDefinition(project);
+    const json = exportAppToClipboardString(definition);
+    Alert.alert(
+      'Exported',
+      `"${project.name}" app definition (${json.length} chars) is ready to share. In production, this uses the native Share sheet.`,
+    );
+  };
+
+  const [showImport, setShowImport] = useState(false);
+  const [importJson, setImportJson] = useState('');
+
+  const handleImport = async () => {
+    if (!importJson.trim()) return;
+    const result = await importAppFromJSON(importJson);
+    if (result.success) {
+      Alert.alert('Imported', 'App imported successfully!');
+      setImportJson('');
+      setShowImport(false);
+      loadProjects();
+    } else {
+      Alert.alert('Import Failed', result.error ?? 'Unknown error');
     }
   };
 
@@ -74,9 +93,14 @@ export function ProjectListScreen({ onOpenBuilder, onPreview }: ProjectListScree
           <Text style={styles.title}>MetaApp</Text>
           <Text style={styles.subtitle}>Your apps</Text>
         </View>
-        <TouchableOpacity onPress={() => setShowCreate(true)} style={styles.createBtn}>
-          <Text style={styles.createBtnText}>+ New App</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <TouchableOpacity onPress={() => setShowImport(true)} style={[styles.createBtn, { backgroundColor: '#475569' }]}>
+            <Text style={styles.createBtnText}>Import</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowCreate(true)} style={styles.createBtn}>
+            <Text style={styles.createBtnText}>+ New</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {projects.length === 0 ? (
@@ -116,6 +140,33 @@ export function ProjectListScreen({ onOpenBuilder, onPreview }: ProjectListScree
           contentContainerStyle={styles.list}
         />
       )}
+
+      {/* Import modal */}
+      <Modal visible={showImport} animationType="slide" presentationStyle="pageSheet">
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={() => { setShowImport(false); setImportJson(''); }}>
+              <Text style={styles.modalCancel}>Cancel</Text>
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}>Import App</Text>
+            <TouchableOpacity onPress={handleImport}>
+              <Text style={styles.modalCreate}>Import</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalLabel}>Paste App JSON</Text>
+            <TextInput
+              style={[styles.modalInput, { height: 200, textAlignVertical: 'top' }]}
+              value={importJson}
+              onChangeText={setImportJson}
+              placeholder='Paste the .metaapp.json content here'
+              placeholderTextColor="#94A3B8"
+              multiline
+              autoFocus
+            />
+          </View>
+        </SafeAreaView>
+      </Modal>
 
       {/* Create modal */}
       <Modal visible={showCreate} animationType="slide" presentationStyle="pageSheet">

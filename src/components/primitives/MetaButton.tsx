@@ -40,6 +40,9 @@ export function MetaButton({ title = 'Button', variant = 'primary', disabled, on
       style={[baseStyle, variantStyles[variant], disabled && { opacity: 0.5 }, style]}
       onPress={onPress}
       disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: !!disabled }}
       activeOpacity={0.7}
     >
       <Text style={{ color: textColors[variant], fontSize: theme.typography.sizes.md, fontWeight: '600' }}>

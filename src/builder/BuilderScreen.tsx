@@ -10,9 +10,10 @@ import { ThemeEditor } from './theme/ThemeEditor';
 import { StateEditor } from './state/StateEditor';
 import { ActionListEditor } from './actions/ActionListEditor';
 import { AppSettingsEditor } from './common/AppSettingsEditor';
+import { ModuleEditor } from './common/ModuleEditor';
 import { PreviewModal } from './preview/PreviewModal';
 
-type PanelMode = 'canvas' | 'palette' | 'properties' | 'screens' | 'theme' | 'state' | 'actions' | 'settings';
+type PanelMode = 'canvas' | 'palette' | 'properties' | 'screens' | 'theme' | 'state' | 'actions' | 'settings' | 'modules';
 
 interface BuilderScreenProps {
   initialDefinition: AppDefinition;
@@ -148,6 +149,13 @@ export function BuilderScreen({ initialDefinition, onSave, onBack }: BuilderScre
             onClose={() => setPanelMode('canvas')}
           />
         )}
+        {panelMode === 'modules' && (
+          <ModuleEditor
+            appDef={builder.appDef}
+            onUpdateDef={builder.setAppDef}
+            onClose={() => setPanelMode('canvas')}
+          />
+        )}
       </View>
 
       {/* Bottom tab bar */}
@@ -158,6 +166,7 @@ export function BuilderScreen({ initialDefinition, onSave, onBack }: BuilderScre
         <BottomTab label="Data" active={panelMode === 'state'} onPress={() => setPanelMode('state')} />
         <BottomTab label="Actions" active={panelMode === 'actions'} onPress={() => setPanelMode('actions')} />
         <BottomTab label="Style" active={panelMode === 'theme'} onPress={() => setPanelMode('theme')} />
+        <BottomTab label="Modules" active={panelMode === 'modules'} onPress={() => setPanelMode('modules')} />
         <BottomTab label="Settings" active={panelMode === 'settings'} onPress={() => setPanelMode('settings')} />
       </View>
 

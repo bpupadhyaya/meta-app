@@ -32,6 +32,8 @@ export function MetaInput({
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
       onChangeText={onChange}
+      accessibilityLabel={placeholder ?? 'Text input'}
+      accessibilityRole="text"
       style={[
         {
           borderWidth: 1,
